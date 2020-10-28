@@ -41,6 +41,7 @@ struct config {
     int             roundrobin_frames;
     int             roundrobin_skip;
     int             roundrobin_switchfilter;
+    int             allow_idling;
 
     const char      *netcam_url;
     char            *netcam_params;

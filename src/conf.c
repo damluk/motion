@@ -56,6 +56,7 @@ struct config conf_template = {
     .roundrobin_frames =               1,
     .roundrobin_skip =                 1,
     .roundrobin_switchfilter =         FALSE,
+    .allow_idling =                    FALSE,
 
     .netcam_url =                      NULL,
     .netcam_params =                   NULL,
@@ -392,6 +393,15 @@ config_param config_params[] = {
     copy_bool,
     print_bool,
     WEBUI_LEVEL_LIMITED
+    },
+    {
+    "allow_idling",
+    "# Let camera idle between frame shots",
+    0,
+    CONF_OFFSET(allow_idling),
+    copy_bool,
+    print_bool,
+    WEBUI_LEVEL_ADVANCED
     },
     {
     "netcam_url",
@@ -3398,6 +3408,7 @@ static void config_parms_intl()
         MOTION_LOG(DBG, TYPE_ALL, NO_ERRNO,"%s:%s","roundrobin_frames",_("roundrobin_frames"));
         MOTION_LOG(DBG, TYPE_ALL, NO_ERRNO,"%s:%s","roundrobin_skip",_("roundrobin_skip"));
         MOTION_LOG(DBG, TYPE_ALL, NO_ERRNO,"%s:%s","roundrobin_switchfilter",_("roundrobin_switchfilter"));
+        MOTION_LOG(DBG, TYPE_ALL, NO_ERRNO,"%s:%s","allow_idling",_("allow_idling"));
         MOTION_LOG(DBG, TYPE_ALL, NO_ERRNO,"%s:%s","netcam_url",_("netcam_url"));
         MOTION_LOG(DBG, TYPE_ALL, NO_ERRNO,"%s:%s","netcam_params",_("netcam_params"));
         MOTION_LOG(DBG, TYPE_ALL, NO_ERRNO,"%s:%s","netcam_high_url",_("netcam_high_url"));

@@ -1046,6 +1046,15 @@ static int v4l2_capture(struct context *cnt, struct video_dev *curdev, unsigned 
     vid_source->buf.memory = V4L2_MEMORY_MMAP;
     vid_source->buf.bytesused = 0;
 
+    if (cnt->conf.allow_idling) {
+        enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        if (xioctl(vid_source, VIDIOC_STREAMON, &type) == -1) {
+            MOTION_LOG(ERR, TYPE_VIDEO, SHOW_ERRNO
+                ,"Error re-starting stream. VIDIOC_STREAMON");
+            return -1;
+        }
+    }
+
     if (xioctl(vid_source, VIDIOC_DQBUF, &vid_source->buf) == -1) {
         /*
          * Some drivers return EIO when there is no signal,
@@ -1084,6 +1093,11 @@ static int v4l2_capture(struct context *cnt, struct video_dev *curdev, unsigned 
 
     //MOTION_LOG(DBG, TYPE_VIDEO, NO_ERRNO, "3) vid_source->pframe %i "
     //           "vid_source->buf.index %i", vid_source->pframe, vid_source->buf.index);
+
+    if (cnt->conf.allow_idling) {
+        enum v4l2_buf_type type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+        xioctl(vid_source, VIDIOC_STREAMOFF, &type);
+    }
 
     pthread_sigmask(SIG_UNBLOCK, &old, NULL);    /*undo the signal blocking */
 
